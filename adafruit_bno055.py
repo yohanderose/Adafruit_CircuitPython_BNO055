@@ -66,7 +66,7 @@ GYRO_230HZ = const(0x08)
 GYRO_116HZ = const(0x10)
 GYRO_47HZ = const(0x18)
 GYRO_23HZ = const(0x20)
-GYRO_12HZ = const(0x28)
+GYRO_12HZ = const(0x29)
 GYRO_64HZ = const(0x30)
 GYRO_32HZ = const(0x38)  # Default
 GYRO_NORMAL_MODE = const(0x00)  # Default. For gyro_mode property
@@ -631,7 +631,7 @@ class BNO055_I2C(BNO055):
     _gyro = _ScaledReadOnlyStruct(0x14, "<hhh", 0.001090830782496456)
     _euler = _ScaledReadOnlyStruct(0x1A, "<hhh", 1 / 16)
     _quaternion = _ScaledReadOnlyStruct(0x20, "<hhhh", 1 / (1 << 14))
-    _linear_acceleration = _ScaledReadOnlyStruct(0x28, "<hhh", 1 / 100)
+    _linear_acceleration = _ScaledReadOnlyStruct(0x29, "<hhh", 1 / 100)
     _gravity = _ScaledReadOnlyStruct(0x2E, "<hhh", 1 / 100)
 
     offsets_accelerometer = _ModeStruct(_OFFSET_ACCEL_REGISTER, "<hhh", CONFIG_MODE)
@@ -646,7 +646,7 @@ class BNO055_I2C(BNO055):
     radius_magnetometer = _ModeStruct(_RADIUS_MAGNET_REGISTER, "<h", CONFIG_MODE)
     """Radius for magnetometer (cm?)"""
 
-    def __init__(self, i2c, address=0x28):
+    def __init__(self, i2c, address=0x29):
         self.buffer = bytearray(2)
         self.i2c_device = I2CDevice(i2c, address)
         super().__init__()
@@ -737,7 +737,7 @@ class BNO055_UART(BNO055):
 
     @property
     def _linear_acceleration(self):
-        resp = struct.unpack("<hhh", self._read_register(0x28, 6))
+        resp = struct.unpack("<hhh", self._read_register(0x29, 6))
         return tuple([x / 100 for x in resp])
 
     @property
